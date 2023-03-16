@@ -1,0 +1,15 @@
+$color: #eee;
+body {
+  background: $color;
+  user-select: none;
+}
+
+img {
+  // 禁止图片拖动
+  -webkit-user-drag: none;
+}
+
+.seit-layout-background {
+  height: 100%;
+  background: colorBgContainer
+}

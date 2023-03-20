@@ -1,17 +1,17 @@
-import {ChangeEvent, useEffect, useState} from "react";
-import {Space,Input,Button,message} from "antd";
+import React, {ChangeEvent, useEffect, useState} from "react";
+import {Space, Input, Button, message, Modal, Form} from "antd";
 import style from "./login.module.scss";
 import "./login.less";
 import initLoginBg from "./init";
 import {useNavigate} from "react-router-dom";
-import {CaptchaApi, LoginApi} from "@/request/api";
+import {LoginApi, LogonApi} from "@/request/api";
+import {useForm} from "antd/es/form/Form";
 const View = () => {
     let navigateTo = useNavigate();
     // 加载完组件后
     useEffect(() => {
         initLoginBg()
         window.onreset = function () {initLoginBg()}
-        getCaptchaImg()
     }, [])
     // 获取用户输入的信息
     const [usernameVal, setUsernameVal] = useState("")
@@ -24,43 +24,63 @@ const View = () => {
         setPasswordVal(e.target.value)
     }
     // 获取验证码输入的信息
-    const [captchaVal, setCaptchaVal] = useState("")
-    const captchaChange = (e: ChangeEvent<HTMLInputElement>) => {
-        setCaptchaVal(e.target.value)
-    }
     // 点击登录按钮事件
     const gotoLogin = async () => {
-        if (!usernameVal.trim() || !passwordVal.trim() || !captchaVal.trim()) {
+        if (!usernameVal.trim() || !passwordVal.trim()) {
             message.warning("Verification failed")
             return
         }
         const params = {
             username: usernameVal.trim(),
             password: passwordVal.trim(),
-            code: captchaVal.trim(),
-            uuid: localStorage.getItem("uuid") as string,
         }
-        const {code, msg, token} = await LoginApi(params);
+        const {code, msg, data} = await LoginApi(params);
         if (code === 200) {
             message.success("登录成功");
-            localStorage.setItem("lege-management-token", token);
+            localStorage.setItem("lege-management-token", data.token);
             navigateTo("/page1");
-            localStorage.removeItem("uuid");
         } else {
             message.error(msg);
         }
     }
-    // 点击验证码盒子事件
-    const [captchaImage, setCaptchaImage] = useState("")
-    const getCaptchaImg = async () => {
-        const {msg, code, img, uuid} = await CaptchaApi()
-        if (code === 200) {
-            setCaptchaImage(`data:image/gif;base64,${img}`)
-            localStorage.setItem("uuid", uuid);
-        } else {
-            message.error(msg);
+    const [isModalOpen, SetIsModalOpen] = useState(false);
+    // 打开注册dialog框
+    const handelLogon = () => {
+        if (!isModalOpen) {
+            SetIsModalOpen(true)
         }
     }
+    const handelCancel = () => {
+        if (isModalOpen) {
+            SetIsModalOpen(false)
+        }
+    }
+    const [form] = useForm()
+    // 注册事件触发
+    const handelLogonEvent = async (values:any) => {
+        const {code, message:msg} = await LogonApi(values);
+        if (code === 0) {
+            message.success(msg)
+            useEffect(() => {
+                form.resetFields()
+            }, [form])
+            handelCancel()
+        } else if(code === -3) {
+            message.warning(msg)
+        } else {
+            message.error(msg)
+        }
+    }
+    const formItemLayout = {
+        labelCol: {
+            xs: { span: 24 },
+            sm: { span: 6 },
+        },
+        wrapperCol: {
+            xs: { span: 24 },
+            sm: { span: 14 },
+        },
+    };
     return (
         <div className={style.loginPage}>
             {/*存放背景*/}
@@ -90,32 +110,88 @@ const View = () => {
                             placeholder="密码"
                             onChange={passwordChange}
                         />
-                        {/*验证码盒子*/}
-                        <div className="captchaBox">
-                            <Input
-                                placeholder="验证码"
-                                onChange={captchaChange}
-                            />
-                            <div
-                                className="captchaImg"
-                                onClick={getCaptchaImg}
-                            >
-                                <img
-                                    height="38"
-                                    src={captchaImage}
-                                    alt="加载失败"
-                                />
-                            </div>
-                        </div>
                         <Button
                             type="primary"
                             className="loginButton"
                             block
                             onClick={gotoLogin}
-                        >Login</Button>
+                        >
+                            登 录
+                        </Button>
+                        <Button
+                            className="loginButton"
+                            block
+                            onClick={handelLogon}
+                        >
+                            注册
+                        </Button>
                     </Space>
                 </div>
             </div>
+            <Modal
+                title='账号注册'
+                open={isModalOpen}
+                footer={null}
+            >
+                <Form
+                    {...formItemLayout}
+                    style={{ maxWidth: 600 }}
+                    onFinish={handelLogonEvent}
+                >
+                    <Form.Item
+                        label='用户名'
+                        name='account_name'
+                        rules={[{required: true, message: '请输入用户名'}]}
+                    >
+                        <Input />
+                    </Form.Item>
+                    <Form.Item
+                        label='密码'
+                        name='password'
+                        rules={[{required: true, message: '请输入密码'}]}
+                    >
+                        <Input.Password />
+                    </Form.Item>
+                    <Form.Item
+                        label='姓名'
+                        name='name'
+                        rules={[{required: true, message: '请输入姓名'}]}
+                    >
+                        <Input />
+                    </Form.Item>
+                    <Form.Item
+                        name="email"
+                        label="E-mail"
+                        rules={[
+                            {
+                                type: 'email',
+                                message: 'The input is not valid E-mail!',
+                            },
+                            {
+                                required: true,
+                                message: '请输入你的 E-mail!',
+                            },
+                        ]}
+                    >
+                        <Input />
+                    </Form.Item>
+                    <Form.Item wrapperCol={{offset: 8, span: 16}}>
+                        <Button
+                            type='primary'
+                            htmlType='submit'
+                            className='footer-btn-offset'
+                        >
+                            注册
+                        </Button>
+                        <Button
+                            htmlType='button'
+                            onClick={handelCancel}
+                        >
+                            取消
+                        </Button>
+                    </Form.Item>
+                </Form>
+            </Modal>
         </div>
     )
 }

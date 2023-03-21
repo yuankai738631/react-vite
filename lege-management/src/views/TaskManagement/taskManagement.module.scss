@@ -1,12 +1,9 @@
-.taskManagerContainer {
-  .searchFormContainer {
-    padding: 16px 24px;
-    display: flex;
-    justify-content: center;
-    height: 160px;
-    align-items: center;
-  }
+.container {
+  padding: 24px;
   .tableContainer {
-    color: #1890ff;
+    margin-top: 16px;
+    .actionBtn {
+      cursor: pointer;
+    }
   }
 }

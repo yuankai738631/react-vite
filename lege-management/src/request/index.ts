@@ -3,7 +3,7 @@ import axios from "axios";
 // 创建axios实例
 const instance = axios.create({
     // 基本请求路径的抽取
-    baseURL: "http://127.0.0.1:8000/",
+    baseURL: "http://192.168.3.6:8080/",
     // 请求超时时间
     timeout: 20000
 })

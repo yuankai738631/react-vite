@@ -27,7 +27,7 @@ import Login from "@/views/Login";
 import Home from "@/views/Home";
 const About = lazy(() => import("@/views/About"));
 const Page1 = lazy(() => import("@/views/Page1"));
-const Page2 = lazy(() => import("@/views/Page2"));
+const Page2 = lazy(() => import("@/views/TaskManagement/taskManagement"));
 const NotFindPage = lazy(() => import("@/NotFindPage"))
 import {Navigate} from "react-router-dom";
 

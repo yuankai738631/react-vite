@@ -20,8 +20,8 @@ function getItem(
 }
 
 const items: MenuItem[] = [
-    getItem('页面1', '/page1', <PieChartOutlined />),
-    getItem('页面2', '/page2', <DesktopOutlined />),
+    getItem('首页', '/page1', <PieChartOutlined />),
+    getItem('设备管理', '/page2', <DesktopOutlined />),
     getItem('About', 'sub1', <UserOutlined />, [
         getItem('Tom', '/sub1/about'),
         getItem('Bill', '4'),

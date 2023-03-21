@@ -27,7 +27,7 @@ import Login from "@/views/Login";
 import Home from "@/views/Home";
 const About = lazy(() => import("@/views/About"));
 const Page1 = lazy(() => import("@/views/Page1"));
-const Page2 = lazy(() => import("@/views/TaskManagement/taskManagement"));
+const TaskManagement = lazy(() => import("@/views/TaskManagement/taskManagement"));
 const NotFindPage = lazy(() => import("@/NotFindPage"))
 import {Navigate} from "react-router-dom";
 
@@ -57,8 +57,8 @@ const routes = [
                 element: widthLoadingComponent(<Page1 />)
             },
             {
-                path: "page2",
-                element: widthLoadingComponent(<Page2 />)
+                path: "task_management",
+                element: widthLoadingComponent(<TaskManagement />)
             },
             {
                 path: "sub1/about",

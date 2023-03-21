@@ -6,6 +6,7 @@ import initLoginBg from "./init";
 import {useNavigate} from "react-router-dom";
 import {LoginApi, LogonApi} from "@/request/api";
 import {useForm} from "antd/es/form/Form";
+
 const View = () => {
     let navigateTo = useNavigate();
     // 加载完组件后
@@ -34,10 +35,12 @@ const View = () => {
             username: usernameVal.trim(),
             password: passwordVal.trim(),
         }
-        const {code, msg, data} = await LoginApi(params);
+        const {code, message:msg, data} = await LoginApi(params);
         if (code === 200) {
-            message.success("登录成功");
-            localStorage.setItem("lege-management-token", data.token);
+            const {token, uid} = data;
+            message.success(msg);
+            localStorage.setItem("lege-management-token", token);
+            localStorage.setItem("uuid", String(uid))
             navigateTo("/page1");
         } else {
             message.error(msg);

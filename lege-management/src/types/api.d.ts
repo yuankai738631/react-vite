@@ -18,9 +18,35 @@ interface LoginApiReq {
 
 // 登录响应类型约束
 interface LoginApiRes {
-	msg: string;
+	message: string;
 	code: number;
 	data: {
-		token: string
+		token: string,
+		uid: number
 	}
+}
+
+// 创建任务请求参数
+interface CreateTaskReq {
+	taskName: string,
+	projectName: string,
+	uui: number
+}
+
+// 查询任务列表响应
+interface QueryTaskRes {
+	code: number;
+	message: string;
+	data: RootObjectData;
+}
+interface RootObjectDataList {
+	id: number;
+	taskName: string;
+	projectName: string;
+	status: number;
+	creator: string;
+	createTime: string;
+}
+interface RootObjectData {
+	list: RootObjectDataList[];
 }

@@ -10,3 +10,11 @@ export const LogonApi = (params:LogonApiReq):Promise<LogonRes> => (
 export const LoginApi = (params:LoginApiReq):Promise<LoginApiRes> => (
     request.post("/users/login", params)
 )
+
+export const CreateTaskApi = (params:CreateTaskReq):Promise<LogonRes> => (
+    request.post('/tasks/create_task', params)
+)
+
+export const QueryTasksApi = (params: {}):Promise<QueryTaskRes> => (
+    request.post('/tasks/query_tasks', params)
+)

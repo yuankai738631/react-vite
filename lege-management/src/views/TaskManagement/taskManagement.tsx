@@ -8,14 +8,17 @@ import {
     Col,
     Space,
     Table,
-    Tag
+    Tag,
+    Drawer, message
 } from 'antd'
-import {PlaySquareOutlined, DeleteOutlined} from "@ant-design/icons"
+import {PlaySquareOutlined, DeleteOutlined, PlusOutlined} from "@ant-design/icons"
 import type {ColumnsType} from "antd/es/table";
 import style from './taskManagement.module.scss';
+import {useEffect, useState} from "react";
+import {CreateTaskApi, QueryTasksApi} from "@/request/api";
 
 
-function AdvancedSearchForm(props:any) {
+const AdvancedSearchForm = (props:any) => {
     const [form] = Form.useForm();
     const { token } = theme.useToken();
 
@@ -57,7 +60,7 @@ function AdvancedSearchForm(props:any) {
                 <Row>
                     <Col span={24} style={{textAlign: "right"}}>
                         <Space size="middle">
-                            <Button type="primary" htmlType="submit">搜索</Button>
+                            <Button type="primary" htmlType="submit" onClick={() => props.searchEvent()}>搜索</Button>
                             <Button onClick={() => {form.resetFields()}}>重置</Button>
                         </Space>
                     </Col>
@@ -68,7 +71,7 @@ function AdvancedSearchForm(props:any) {
 }
 
 interface DataType {
-    key: number;
+    id: number;
     taskName: string;
     projectName: string;
     status: number;
@@ -89,6 +92,32 @@ const DataTable = (props:any) => {
             }
         }
     }
+    const [open, setOpen] = useState(false)
+    const [form] = Form.useForm()
+    // 新增任务
+    const drawerOpen = () => {
+        setOpen(true)
+    }
+    const drawerClose = () => {
+        setOpen(false)
+    }
+    const handleSubmit = async () => {
+        const drawerFromData = form.getFieldsValue()
+        const uuid = localStorage.getItem('uuid')
+        const {code, message:msg} = await CreateTaskApi(Object.assign(drawerFromData, {uuid: Number(uuid)}))
+        if (code !== 200) message.error(msg)
+        message.success(msg)
+        form.resetFields()
+        drawerClose()
+    }
+    // 表格启动按钮事件
+    const handleRunTask = (row:DataType) => {
+        console.log(row)
+    }
+    // 表格删除按钮事件
+    const handleDelTask = (row:DataType) => {
+        console.log(row)
+    }
     const columns: ColumnsType<DataType> = [
         { title: '任务名称', key: 0, dataIndex: 'taskName' },
         { title: '所属项目', key: 1, dataIndex: 'projectName' },
@@ -106,26 +135,75 @@ const DataTable = (props:any) => {
             key: 'action',
             render: (_, record) =>  (
                     <Space size="middle">
-                        <Button size='small' type='link' icon={<PlaySquareOutlined />}>启动</Button>
-                        <Button size='small' type='link' danger icon={<DeleteOutlined />}>删除</Button>
+                        <Button
+                            size='small'
+                            type='link'
+                            icon={<PlaySquareOutlined
+                            />}
+                            onClick={() => handleRunTask(record)}
+                        >
+                            启动
+                        </Button>
+                        <Button
+                            size='small'
+                            type='link'
+                            danger
+                            icon={<DeleteOutlined />}
+                            onClick={() => handleDelTask(record)}
+                        >
+                            删除
+                        </Button>
                     </Space>
                 )
         }
     ]
-    const data:DataType[] = [
-        { key: 1, taskName: '测试表格', projectName: 'com.vivo.hybrid', status: 0, creator: '张三' },
-        { key: 2, taskName: '测试表格1', projectName: 'com.vivo.game', status: 100, creator: '李四' },
-        { key: 3, taskName: '测试表格2', projectName: 'com.vivo.browser', status: 200, creator: '王五' },
-        { key: 4, taskName: '测试表格3', projectName: 'com.vivo.appStore', status: 200, creator: '马六' }
-    ]
     return (
         <div className={style.tableContainer}>
+            <Button
+                type='primary'
+                icon={<PlusOutlined />}
+                onClick={drawerOpen}
+                className={style.headerBtn}
+            >
+                创建任务
+            </Button>
             <Table
                 size='middle'
                 columns={columns}
-                dataSource={data}
+                dataSource={props.data}
                 bordered
+                rowKey={(record) => record.id}
             />
+            <Drawer
+                title='新增任务'
+                width={720}
+                onClose={drawerClose}
+                open={open}
+                bodyStyle={{paddingBottom: 80}}
+                extra={
+                    <Space>
+                        <Button onClick={drawerClose}>取消</Button>
+                        <Button onClick={handleSubmit} type='primary'>提交</Button>
+                    </Space>
+                }
+            >
+                <Form form={form} layout='vertical' requiredMark={false}>
+                    <Form.Item
+                        label='任务名称'
+                        name='taskName'
+                        rules={[{required:true, message: '请填写任务名称'}]}
+                    >
+                        <Input />
+                    </Form.Item>
+                    <Form.Item
+                        label='所属项目'
+                        name='projectName'
+                        rules={[{required:true, message: '请填写任务所属项目'}]}
+                    >
+                        <Input />
+                    </Form.Item>
+                </Form>
+            </Drawer>
         </div>
     )
 }
@@ -136,10 +214,22 @@ const TaskManagementContainer = () => {
         {value: 100, label: '进行中'},
         {value: 200, label: '已完成'},
     ]
+    const [data, setData] = useState<RootObjectDataList[]>()
+    const tasksInfo = async () => {
+        const {code, message:msg, data:list} = await QueryTasksApi({})
+        if (code === 200) {
+            setData(list.list)
+        } else {
+            message.error(msg)
+        }
+    }
+    useEffect(() => {
+        tasksInfo()
+    }, [])
     return (
         <div className={style.container}>
-            <AdvancedSearchForm taskStatus={taskStatus} />
-            <DataTable taskStatus={taskStatus} />
+            <AdvancedSearchForm taskStatus={taskStatus} searchEvent={tasksInfo} />
+            <DataTable taskStatus={taskStatus} data={data} />
         </div>
     )
 }

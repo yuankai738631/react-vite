@@ -1,8 +1,19 @@
-function NotFindPage() {
+import {Button, Result} from "antd";
+import {useNavigate} from "react-router-dom"
+
+
+const NotFindPage = () => {
+    const navigateTo = useNavigate()
+    const toBackHome = () => {
+        navigateTo('/page1')
+    }
     return (
-        <div className="about">
-            <p>404</p>
-        </div>
+        <Result
+            status='404'
+            title='404'
+            subTitle='Sorry, the page you visited does not exist.'
+            extra={<Button type='primary' onClick={toBackHome}>回到首页</Button>}
+        />
     )
 }
 

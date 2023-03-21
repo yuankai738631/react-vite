@@ -1,6 +1,6 @@
 const store = {
     state: {
-        count: 20
+        count: 20,
     },
     actions: {
         // 只放同步的方法
@@ -25,11 +25,6 @@ const store = {
             }, 1000)
         }
     },
-    // 名字统一管理
-    // actionNames: {
-    //     addCount: "addCount",
-    //     addCount2: "addCount2",
-    // }
     actionNames: {}
 }
 let actionNames = {};

@@ -21,7 +21,7 @@ function getItem(
 
 const items: MenuItem[] = [
     getItem('首页', '/page1', <PieChartOutlined />),
-    getItem('设备管理', '/page2', <DesktopOutlined />),
+    getItem('任务管理', '/task_management', <DesktopOutlined />),
     getItem('About', 'sub1', <UserOutlined />, [
         getItem('Tom', '/sub1/about'),
         getItem('Bill', '4'),

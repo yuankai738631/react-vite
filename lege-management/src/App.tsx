@@ -17,7 +17,7 @@ function ToLogin() {
     const navigateTo = useNavigate()
     useEffect(() => {
         navigateTo("/login")
-        message.warning("您还没有登录，请登录后再访问！")
+        message.warning("您还没有登录或登录已失效，请登录后再访问！")
     })
     return <></>
 }
@@ -31,13 +31,14 @@ function BeforeRouterEnter() {
      * 3.其余的正常放行
      * */
     const token = localStorage.getItem("lege-management-token");
+    const uuid = localStorage.getItem('uuid')
     const location = useLocation()
     // 这里不能用useNavigate来实现跳转，因为需要BeforeRouterEnter是一个正常的TSX组件
-    if (location.pathname === "/login" && token)
+    if (location.pathname === "/login" && token && uuid)
     {
         return <ToHome />
     }
-    if (location.pathname !== "/login" && !token)
+    if (location.pathname !== "/login" && (!token || !uuid))
     {
         return <ToLogin />
     }

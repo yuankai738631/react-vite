@@ -4,7 +4,7 @@ import style from "./login.module.scss";
 import "./login.less";
 import initLoginBg from "./init";
 import {useNavigate} from "react-router-dom";
-import {LoginApi, LogonApi} from "@/request/api";
+import {user} from "@/request/api";
 import {useForm} from "antd/es/form/Form";
 
 const View = () => {
@@ -35,7 +35,7 @@ const View = () => {
             username: usernameVal.trim(),
             password: passwordVal.trim(),
         }
-        const {code, message:msg, data} = await LoginApi(params);
+        const {code, message:msg, data} = await user.LoginApi(params);
         if (code === 200) {
             const {token, uid} = data;
             message.success(msg);
@@ -61,7 +61,7 @@ const View = () => {
     const [form] = useForm()
     // 注册事件触发
     const handelLogonEvent = async (values:any) => {
-        const {code, message:msg} = await LogonApi(values);
+        const {code, message:msg} = await user.LogonApi(values);
         if (code === 0) {
             message.success(msg)
             useEffect(() => {

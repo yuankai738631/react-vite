@@ -33,13 +33,22 @@ interface CreateTaskReq {
 	uui: number
 }
 
+interface QueryTaskReq {
+	page?: number;
+	pageSize?: number;
+	taskName?: string;
+	projectName?: string;
+	taskStatus?: number
+
+}
+
 // 查询任务列表响应
 interface QueryTaskRes {
 	code: number;
 	message: string;
-	data: RootObjectData;
+	data: TaskListData;
 }
-interface RootObjectDataList {
+interface TaskList {
 	id: number;
 	taskName: string;
 	projectName: string;
@@ -47,6 +56,9 @@ interface RootObjectDataList {
 	creator: string;
 	createTime: string;
 }
-interface RootObjectData {
-	list: RootObjectDataList[];
+interface TaskListData {
+	list: TaskList[];
+	total: number;
+	currentPage: number;
+	projectList: string[]
 }

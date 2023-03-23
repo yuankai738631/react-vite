@@ -5,6 +5,7 @@ import {DeleteOutlined, PlaySquareOutlined, PlusOutlined} from "@ant-design/icon
 import type {ColumnsType} from "antd/es/table";
 import style from './taskManagement.module.scss';
 import {task} from "@/request/api";
+import unique from "@/utils";
 
 
 const AdvancedSearchForm = (props:any) => {
@@ -106,8 +107,10 @@ const DataTable = (props:any) => {
         if (row.id) {
             const { code, message:msg } = await task.DeleteTaskApi({id: row.id})
             if (code === 200) {
+                props.searchEvent({})
+                console.log(props.searchEvent())
                 message.success(msg)
-                props.searchEvent()
+
             } else {
                 message.error(msg)
             }
@@ -183,9 +186,12 @@ const DataTable = (props:any) => {
                 dataSource={props.data}
                 bordered
                 rowKey={(record) => record.id}
+                scroll={{y: 464}}
                 pagination={{
                     current: props.currentPage,
-                    total: props.total
+                    total: props.total,
+                    pageSize: 10,
+                    onChange: (page, pageSize) => props.searchEvent({page, pageSize})
                 }}
             />
             <Drawer
@@ -233,6 +239,7 @@ const TaskManagementContainer = () => {
     const [total, setTotal] = useState<number>(1)
     const [projectList, setProjectList] = useState<string[]>()
     const tasksInfo = async (params:QueryTaskReq) => {
+        if (!params) { params = {} }
         const {code, message:msg, data:list} = await task.QueryTasksApi(params)
         if (code === 200) {
             setData(list.list)
@@ -245,7 +252,8 @@ const TaskManagementContainer = () => {
     }
     const projectToOption = (list: string[] | undefined) => {
         if (!list) return []
-        return list.map((item:string) => ({value: item, label: item}))
+        const newList = unique(list)
+        return newList.map((item:string) => ({value: item, label: item}))
     }
     useEffect(() => {
         tasksInfo({})

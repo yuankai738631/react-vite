@@ -29,6 +29,7 @@ const Home = () => {
                 key: url,
                 title: <Button
                     type="link"
+                    size="small"
                     onClick={
                         () => {
                             navigateTo(url)
@@ -43,6 +44,7 @@ const Home = () => {
         {
             title: <Button
                 type="link"
+                size="small"
                 onClick={
                     () => {
                         navigateTo("/")

@@ -1,7 +1,7 @@
 import {useEffect, useState} from "react";
 import moment from "moment";
 import {Button, Col, Drawer, Form, Input, message, Popconfirm, Row, Select, Space, Table, Tag, theme} from 'antd'
-import {DeleteOutlined, PlaySquareOutlined, PlusOutlined} from "@ant-design/icons"
+import {DeleteOutlined, PlaySquareOutlined, PlusOutlined, ContainerOutlined} from "@ant-design/icons"
 import type {ColumnsType} from "antd/es/table";
 import style from './taskManagement.module.scss';
 import {task} from "@/request/api";
@@ -147,6 +147,7 @@ const DataTable = (props:any) => {
                             icon={<PlaySquareOutlined
                             />}
                             onClick={() => handleRunTask(record)}
+                            disabled={record.status === 100}
                         >
                             启动
                         </Button>
@@ -162,10 +163,19 @@ const DataTable = (props:any) => {
                                 type='link'
                                 danger
                                 icon={<DeleteOutlined />}
+                                disabled={record.status === 100}
                             >
                                 删除
                             </Button>
                         </Popconfirm>
+                        <Button
+                            size='small'
+                            type='link'
+                            icon={<ContainerOutlined />}
+                            disabled={record.status !== 200}
+                        >
+                            查看结果
+                        </Button>
                     </Space>
                 )
         }

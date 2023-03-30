@@ -1,5 +1,9 @@
-const PixiView = () => {
-    return (<div></div>)
-}
+import Fetch from "@/components/FetchComponent"
 
-export default PixiView
+const View = () => (
+    <div>
+        <Fetch />
+    </div>
+)
+
+export default View

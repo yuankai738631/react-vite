@@ -1,14 +1,14 @@
 import {Menu, MenuProps} from "antd";
-import React, {useState} from "react";
-import {DesktopOutlined, FileOutlined, PieChartOutlined, TeamOutlined, UserOutlined} from "@ant-design/icons";
-import {useNavigate, useLocation} from "react-router-dom";
+import { useState, ReactNode, Key } from "react";
+import {useLocation, useNavigate} from "react-router-dom";
+import {DashboardOutlined, DesktopOutlined, UserOutlined, TeamOutlined, FileOutlined} from "@ant-design/icons";
 
 type MenuItem = Required<MenuProps>['items'][number];
 
 function getItem(
-    label: React.ReactNode,
-    key: React.Key,
-    icon?: React.ReactNode,
+    label: ReactNode,
+    key: Key,
+    icon?: ReactNode,
     children?: MenuItem[],
 ): MenuItem {
     return {
@@ -19,27 +19,26 @@ function getItem(
     } as MenuItem;
 }
 
+
 const items: MenuItem[] = [
-    getItem('首页', '/page1', <PieChartOutlined />),
-    getItem('任务管理', '/task_management', <DesktopOutlined />),
-    getItem('About', 'sub1', <UserOutlined />, [
-        getItem('Tom', '/sub1/about'),
-        getItem('Bill', '4'),
-        getItem('Alex', '5'),
-    ]),
-    getItem('Team', 'sub2', <TeamOutlined />, [getItem('Team 1', '6'), getItem('Team 2', '8')]),
-    getItem('Files', '9', <FileOutlined />),
+    getItem('Dashboard', '/dashboard', <DashboardOutlined/>),
+    getItem('任务管理', '/task_management', <DesktopOutlined/>),
+    getItem("人员管理", 'user', <UserOutlined/>, [
+        getItem('个人信息', '/user/userinfo'),
+        getItem('权限配置', '/user/auth'),
+    ])
 ];
 
-const MainMenu: React.FC = () => {
+const MainMenu = () => {
     const navigateTo = useNavigate()
-    const menuClick = (e: {key:string}) => {
+    const menuClick = (e: { key: string }) => {
         // 编程式导航跳转
         navigateTo(e.key);
     }
     const currentRoute = useLocation()
-    let firstOpenKey:string = ''
-    function findKey(obj:{key:string}) {
+    let firstOpenKey: string = ''
+
+    function findKey(obj: { key: string }) {
         return obj.key === currentRoute.pathname
     }
 

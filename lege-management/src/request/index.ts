@@ -1,4 +1,5 @@
 import axios from "axios";
+import { message } from "antd";
 
 // 创建axios实例
 const instance = axios.create({
@@ -23,7 +24,20 @@ instance.interceptors.response.use(
     res => {
         return res.data
     },
-    error => Promise.reject(error)
+    error => {
+        const { response } = error;
+        switch(response.status) {
+            case 404:
+                message.error("网络请求不存在");
+                break;
+            case 500:
+                message.error(response.data.errorMessage || "服务器异常，请稍后重试");
+                break;
+            default:
+                message.error(response.data.errorMessage || "请求出现未知错误，请稍后重试")
+        }
+        return Promise.reject(error)
+    }
 )
 
 export default instance

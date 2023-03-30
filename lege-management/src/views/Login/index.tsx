@@ -1,5 +1,5 @@
 import React, {ChangeEvent, useEffect, useState} from "react";
-import {Space, Input, Button, message, Modal, Form} from "antd";
+import {Button, Form, Input, message, Modal, Space} from "antd";
 import style from "./login.module.scss";
 import "./login.less";
 import initLoginBg from "./init";
@@ -12,7 +12,9 @@ const View = () => {
     // 加载完组件后
     useEffect(() => {
         initLoginBg()
-        window.onreset = function () {initLoginBg()}
+        window.onreset = function () {
+            initLoginBg()
+        }
     }, [])
     // 获取用户输入的信息
     const [usernameVal, setUsernameVal] = useState("")
@@ -35,13 +37,13 @@ const View = () => {
             username: usernameVal.trim(),
             password: passwordVal.trim(),
         }
-        const {code, message:msg, data} = await user.LoginApi(params);
+        const {code, message: msg, data} = await user.LoginApi(params);
         if (code === 200) {
             const {token, uid} = data;
             message.success(msg);
             localStorage.setItem("lege-management-token", token);
             localStorage.setItem("uuid", String(uid))
-            navigateTo("/page1");
+            navigateTo("/dashboard");
         } else {
             message.error(msg);
         }
@@ -60,15 +62,15 @@ const View = () => {
     }
     const [form] = useForm()
     // 注册事件触发
-    const handelLogonEvent = async (values:any) => {
-        const {code, message:msg} = await user.LogonApi(values);
+    const handelLogonEvent = async (values: any) => {
+        const {code, message: msg} = await user.LogonApi(values);
         if (code === 0) {
             message.success(msg)
             useEffect(() => {
                 form.resetFields()
             }, [form])
             handelCancel()
-        } else if(code === -3) {
+        } else if (code === -3) {
             message.warning(msg)
         } else {
             message.error(msg)
@@ -76,12 +78,12 @@ const View = () => {
     }
     const formItemLayout = {
         labelCol: {
-            xs: { span: 24 },
-            sm: { span: 6 },
+            xs: {span: 24},
+            sm: {span: 6},
         },
         wrapperCol: {
-            xs: { span: 24 },
-            sm: { span: 14 },
+            xs: {span: 24},
+            sm: {span: 14},
         },
     };
     return (
@@ -138,7 +140,7 @@ const View = () => {
             >
                 <Form
                     {...formItemLayout}
-                    style={{ maxWidth: 600 }}
+                    style={{maxWidth: 600}}
                     onFinish={handelLogonEvent}
                 >
                     <Form.Item
@@ -146,21 +148,21 @@ const View = () => {
                         name='account_name'
                         rules={[{required: true, message: '请输入用户名'}]}
                     >
-                        <Input />
+                        <Input/>
                     </Form.Item>
                     <Form.Item
                         label='密码'
                         name='password'
                         rules={[{required: true, message: '请输入密码'}]}
                     >
-                        <Input.Password />
+                        <Input.Password/>
                     </Form.Item>
                     <Form.Item
                         label='姓名'
                         name='name'
                         rules={[{required: true, message: '请输入姓名'}]}
                     >
-                        <Input />
+                        <Input/>
                     </Form.Item>
                     <Form.Item
                         name="email"
@@ -176,7 +178,7 @@ const View = () => {
                             },
                         ]}
                     >
-                        <Input />
+                        <Input/>
                     </Form.Item>
                     <Form.Item wrapperCol={{offset: 8, span: 16}}>
                         <Button

@@ -1,9 +1,9 @@
-function View() {
+function UserInfo() {
     return (
         <div className="about">
-            <p>about</p>
+            <p>userinfo</p>
         </div>
     )
 }
 
-export default View
+export default UserInfo

@@ -25,11 +25,15 @@
 import React, {lazy} from "react"; // 路由懒加载
 import Login from "@/views/Login";
 import Home from "@/views/Home";
-const About = lazy(() => import("@/views/About"));
-const Page1 = lazy(() => import("@/views/Page1"));
+import {Navigate} from "react-router-dom";
+import {DashboardOutlined, DesktopOutlined, UserOutlined} from "@ant-design/icons";
+import {RouteObject} from "@/types/routes";
+
+const UserInfo = lazy(() => import("@/views/UserManagement/UserInfo"));
+const Dashboard = lazy(() => import("@/views/PixiPage/pixiPage"));
 const TaskManagement = lazy(() => import("@/views/TaskManagement/taskManagement"));
 const NotFindPage = lazy(() => import("@/NotFindPage"))
-import {Navigate} from "react-router-dom";
+const UserAuth = lazy(() => import("@/views/UserManagement/UserAuth"));
 
 /** 报错：Uncaught Error: A component suspended while responding to synchronous input.
  * This will cause the UI to be replaced with a loading indicator.
@@ -43,46 +47,47 @@ const widthLoadingComponent = (component: JSX.Element) => (
 )
 
 
-const routes = [
+const routes:RouteObject[] = [
     {
         path: "/",
-        element: <Navigate to="/page1" />,
+        element: <Navigate to="/dashboard"/>,
     },
     {
         path: "/",
-        element: <Home />,
+        element: <Home/>,
         children: [
             {
-                path: "page1",
-                element: widthLoadingComponent(<Page1 />)
+                icon: <DashboardOutlined/>,
+                path: "dashboard",
+                element: widthLoadingComponent(<Dashboard/>)
             },
             {
                 path: "task_management",
-                element: widthLoadingComponent(<TaskManagement />)
+                icon: <DesktopOutlined/>,
+                element: widthLoadingComponent(<TaskManagement/>)
             },
             {
-                path: "sub1/about",
-                element: widthLoadingComponent(<About />)
+                path: "user/userinfo",
+                element: widthLoadingComponent(<UserInfo/>)
+            },
+            {
+                path: "user/auth",
+                element: widthLoadingComponent(<UserAuth/>)
             },
             {
                 path: "404",
-                element: widthLoadingComponent(<NotFindPage />)
+                element: widthLoadingComponent(<NotFindPage/>)
             },
         ]
     },
     {
         path: "/login",
-        element: <Login />
+        element: <Login/>
     },
     {
         path: "*",
-        element: <Navigate to="/404" />
+        element: <Navigate to="/404"/>
     }
-    // {
-    //     path: "/home",
-    //     // element: <Home />
-    //     element: <Home />
-    // },
 
 ]
 

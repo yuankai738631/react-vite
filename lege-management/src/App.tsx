@@ -1,7 +1,7 @@
-import {useEffect} from 'react'
-import {useRoutes, useLocation, useNavigate} from "react-router-dom"
+import { useEffect } from 'react'
+import { useRoutes, useLocation, useNavigate } from "react-router-dom"
 import router from "@/router";
-import {message} from "antd";
+import { message } from "antd";
 
 
 function ToHome() {
@@ -9,7 +9,7 @@ function ToHome() {
     useEffect(() => {
         navigateTo("/page1")
         message.warning("您已经登录！")
-    },[])
+    }, [])
     return <></>
 }
 
@@ -30,16 +30,14 @@ function BeforeRouterEnter() {
      * 2.访问不是登录页， 无token， 跳转登录页
      * 3.其余的正常放行
      * */
-    const token = localStorage.getItem("lege-management-token");
-    const uuid = localStorage.getItem('uuid')
+    const token = localStorage.getItem("token");
+    const uuid = localStorage.getItem('uid')
     const location = useLocation()
     // 这里不能用useNavigate来实现跳转，因为需要BeforeRouterEnter是一个正常的TSX组件
-    if (location.pathname === "/login" && token && uuid)
-    {
+    if (location.pathname === "/login" && token && uuid) {
         return <ToHome />
     }
-    if (location.pathname !== "/login" && (!token || !uuid))
-    {
+    if (location.pathname !== "/login" && (!token || !uuid)) {
         return <ToLogin />
     }
     return outlet

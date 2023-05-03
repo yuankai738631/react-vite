@@ -23,12 +23,13 @@
 
 // -----------路由表写法-----------------------------------
 import React, {lazy} from "react"; // 路由懒加载
-import Login from "@/views/Login";
-import Home from "@/views/Home";
 import {Navigate} from "react-router-dom";
 import {DashboardOutlined, DesktopOutlined, UserOutlined} from "@ant-design/icons";
 import {RouteObject} from "@/types/routes";
 
+const Login = lazy(() => import("@/views/Login"));
+const Logon = lazy(() => import("@/views/Logon"));
+const Home = lazy(() => import("@/views/Home"))
 const UserInfo = lazy(() => import("@/views/UserManagement/UserInfo"));
 const Dashboard = lazy(() => import("@/views/PixiPage/pixiPage"));
 const TaskManagement = lazy(() => import("@/views/TaskManagement/taskManagement"));
@@ -54,7 +55,7 @@ const routes:RouteObject[] = [
     },
     {
         path: "/",
-        element: <Home/>,
+        element: widthLoadingComponent(<Home/>),
         children: [
             {
                 icon: <DashboardOutlined/>,
@@ -82,7 +83,11 @@ const routes:RouteObject[] = [
     },
     {
         path: "/login",
-        element: <Login/>
+        element: widthLoadingComponent(<Login/>)
+    },
+    {
+        path: "/logon",
+        element: widthLoadingComponent(<Logon/>)
     },
     {
         path: "*",

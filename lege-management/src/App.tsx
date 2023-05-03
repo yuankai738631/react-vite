@@ -3,9 +3,8 @@ import { useRoutes, useLocation, useNavigate } from "react-router-dom"
 import router from "@/router";
 import { message } from "antd";
 
-
-function ToHome() {
-    const navigateTo = useNavigate()
+const ToHome = function() {
+    const navigateTo = useNavigate();
     useEffect(() => {
         navigateTo("/page1")
         message.warning("您已经登录！")
@@ -13,12 +12,20 @@ function ToHome() {
     return <></>
 }
 
-function ToLogin() {
-    const navigateTo = useNavigate()
+const ToLogin = function() {
+    const navigateTo = useNavigate();
     useEffect(() => {
         navigateTo("/login")
         message.warning("您还没有登录或登录已失效，请登录后再访问！")
     })
+    return <></>
+}
+
+const ToLogout = function() {
+    const navigateTo = useNavigate();
+    useEffect(() => {
+        navigateTo("/logout");
+    });
     return <></>
 }
 
@@ -34,14 +41,18 @@ function BeforeRouterEnter() {
     const uuid = localStorage.getItem('uid')
     const location = useLocation()
     // 这里不能用useNavigate来实现跳转，因为需要BeforeRouterEnter是一个正常的TSX组件
-    if (location.pathname === "/login" && token && uuid) {
+    //debugger
+    if ((location.pathname === "/login" || location.pathname === "/logon") && token && uuid) {
         return <ToHome />
     }
-    if (location.pathname !== "/login" && (!token || !uuid)) {
+    else if ((location.pathname !== "/login" && location.pathname !== "/logon") && (!token || !uuid)) {
         return <ToLogin />
     }
-    return outlet
+    else {
+        return outlet
+    }
 }
+
 function App() {
     return (
         <div className="App">

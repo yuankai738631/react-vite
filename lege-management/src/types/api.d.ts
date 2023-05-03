@@ -1,9 +1,10 @@
 // 注册请求的响应类型
 interface LogonApiReq {
-	account_name: string,
-	password: string,
-	name: string,
+	username: string
+	password: string
+	againPassword?: string
 	email: string
+	policy?: boolean
 }
 interface LogonRes {
 	code: number;

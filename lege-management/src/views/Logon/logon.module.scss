@@ -1,0 +1,33 @@
+@import "/src/assets/style/main.scss";
+
+.logout_section {
+  width: 100vw;
+  height: 100vh;
+  background-image: linear-gradient(to right bottom, $color-primary-light, $color-primary-dark);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+
+  &__content {
+    width: 64vw;
+
+    // padding: 24px;
+    background-color: $color-white;
+    border-radius: .5rem;
+    box-shadow: 0 1rem 3rem rgba($color-black, 0.1);
+  }
+
+  &__form {
+    padding: 0 2rem;
+
+    a {
+      &,
+      &:link,
+      &:visited {
+        text-decoration: none;
+        font-weight: 600;
+        color: $login-default-color;
+      }
+    }
+  }
+}

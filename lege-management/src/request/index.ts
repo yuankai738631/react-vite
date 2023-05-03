@@ -26,6 +26,7 @@ instance.interceptors.response.use(
     },
     error => {
         const { response } = error;
+        console.log(error)
         switch(response.status) {
             case 404:
                 message.error("网络请求不存在");

@@ -1,8 +1,6 @@
-import Fetch from "@/components/FetchComponent"
-
 const View = () => (
     <div>
-        <Fetch />
+        index
     </div>
 )
 

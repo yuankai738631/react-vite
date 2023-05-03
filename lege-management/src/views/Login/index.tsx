@@ -1,6 +1,5 @@
-import { useState } from "react"
 import { useNavigate } from "react-router-dom"
-import { Col, Row, message } from "antd";
+import { Col, Row, message, Button, Form, Input } from "antd";
 import style from "./login.module.scss";
 import { user } from "@/request/api"
 
@@ -8,23 +7,26 @@ const LoginForm = function () {
 
     const navigate = useNavigate()
 
-    const [username, setUsername] = useState<string | null>(null);
-    const [password, setPassword] = useState<string | null>(null);
+    const formRules = {
+        username: [{ required: true, message: '请输入用户名' }],
+        password: [{ required: true, message: '请输入密码' }]
+    };
 
-    const getInputValue = (inputId: string): void => {
-        const currentElement = document.querySelector(`#${inputId}`) as HTMLInputElement;
+    const onFinish = (value: any) => {
+        handleSubmit(value);
+    }
 
-        if (!currentElement.value) return;
-        if (inputId === "user-name") {
-            setUsername(currentElement.value.trim())
-        } else {
-            setPassword(currentElement.value.trim())
+    const onFinishFailed = (errorInfo: any):void => {
+        const {errorFields} = errorInfo;
+        if (errorFields.length === 1) {
+            message.warning(errorFields[0].errors[0])
         }
     }
 
-    const handleSubmit = async (): Promise<void> => {
+    const handleSubmit = async (params:{username: string, password: string}): Promise<void> => {
+        const {username, password} = params;
         if (username && password) {
-            const res = await user.LoginApi({ username, password })
+            const res = await user.LoginApi(params)
             if (res.code === 500) {
                 message.warning(`${res.message}, 请重新登录！`);
                 return
@@ -39,46 +41,30 @@ const LoginForm = function () {
         }
     };
 
+    const handleLogOut = (e: any):void => {
+        e.isDefaultPrevented()
+        navigate("/logon")
+    }
+
     return (
-        <>
-            <form className={style["form"]}>
-                <div className={style["form__group"]}>
-                    <input
-                        type="text"
-                        id="user-name"
-                        className={style["form__input"]}
-                        placeholder="用户名"
-                        name="username"
-                        required
-                        onInput={() => getInputValue("user-name")}
-                    />
-                    <label htmlFor="user-name" className={style["form__label"]}>
-                        用户名
-                    </label>
-                </div>
-
-                <div className={style["form__group"]}>
-                    <input
-                        type="password"
-                        id="password"
-                        className={style["form__input"]}
-                        placeholder="密码"
-                        name="password"
-                        required
-                        onInput={() => getInputValue("password")}
-                    />
-                    <label htmlFor="password" className={style["form__label"]}>
-                        密码
-                    </label>
-                </div>
-
-                <div className={style["form_group"]}>
-                    <a href="#" className={style["btn"]} onClick={handleSubmit}>
-                        登 录
-                    </a>
-                </div>
-            </form>
-        </>
+        <Form name="login" className={style['form']} labelCol={{ span: 5 }}  onFinish={onFinish} onFinishFailed={onFinishFailed} autoComplete="off" colon={false}>
+            <Form.Item label={<span className={style['form_label']}>用户名</span>} name="username" rules={formRules.username}>
+                <Input />
+            </Form.Item>
+            <Form.Item label={<span className={style['form_label']}>密码</span>} name="password" rules={formRules.password}>
+                <Input.Password />
+            </Form.Item>
+            <Form.Item wrapperCol={{ offset: 4, span: 20 }}>
+                <Row gutter={32}>
+                    <Col span={12}>
+                        <Button size="large" htmlType="submit" className={style['btn']} block>登 录</Button>
+                    </Col>
+                    <Col span={12}>
+                        <Button size="large" block className={style['btn']} onClick={handleLogOut}>注 册</Button>
+                    </Col>
+                </Row>
+            </Form.Item>
+        </Form>
     );
 };
 

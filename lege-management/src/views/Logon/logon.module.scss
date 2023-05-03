@@ -10,6 +10,7 @@
 
   &__content {
     width: 64vw;
+    max-width: 500px;
 
     // padding: 24px;
     background-color: $color-white;
@@ -18,8 +19,7 @@
   }
 
   &__form {
-    padding: 0 2rem;
-
+    padding-right:2rem;
     a {
       &,
       &:link,

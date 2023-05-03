@@ -57,10 +57,10 @@ const LoginForm = function () {
             <Form.Item wrapperCol={{ offset: 4, span: 20 }}>
                 <Row gutter={32}>
                     <Col span={12}>
-                        <Button size="large" htmlType="submit" className={style['btn']} block>登 录</Button>
+                        <Button htmlType="submit" className={style['btn']} block>登 录</Button>
                     </Col>
                     <Col span={12}>
-                        <Button size="large" block className={style['btn']} onClick={handleLogOut}>注 册</Button>
+                        <Button block className={style['btn']} onClick={handleLogOut}>注 册</Button>
                     </Col>
                 </Row>
             </Form.Item>

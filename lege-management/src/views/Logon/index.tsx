@@ -3,12 +3,8 @@ import { Form, Button, Input, Card, Checkbox, message } from "antd";
 import style from "./logon.module.scss";
 import {user} from "@/request/api";
 
-const toLoginPage = ():void => {
-  const navigate = useNavigate();
-  navigate("/login");
-}
-
 const LogoutForm = () => {
+  const navigate = useNavigate();
 
   const formRules = {
     username: [{ required: true, message: "请输入用户名" }],
@@ -44,7 +40,7 @@ const LogoutForm = () => {
       return
     }
     message.success(res.message);
-    toLoginPage()
+    navigate("/login");
   }
 
   return (
@@ -69,12 +65,12 @@ const LogoutForm = () => {
       <Form.Item label={<span>邮箱</span>} name="email" rules={formRules.email}>
         <Input type="email" />
       </Form.Item>
-      <Form.Item name="policy" valuePropName="checked">
+      <Form.Item name="policy" valuePropName="checked" wrapperCol={{ offset: 1, span: 24 }}>
         <Checkbox>
           <span>已阅并同意<a href="#" onClick={(e) => handleClick(e, AGREEMENT)}>《58同城使用协议》</a>&<a href="#" onClick={(e) => handleClick(e, POLICY)}>《隐私政策》</a></span>
         </Checkbox>
       </Form.Item>
-      <Form.Item wrapperCol={{ offset: 0, span: 24 }}>
+      <Form.Item wrapperCol={{ offset: 1, span: 24 }}>
         <Button type="primary" block htmlType="submit">注册</Button>
       </Form.Item>
     </Form>
@@ -82,9 +78,10 @@ const LogoutForm = () => {
 }
 
 const Logon = () => {
+  const navigate = useNavigate();
   return (
     <section className={style['logout_section']}>
-      <Card className={style['logout_section__content']} title="账号注册" extra={<Button type="link" onClick={toLoginPage}>返回</Button>}>
+      <Card className={style['logout_section__content']} title="账号注册" extra={<Button type="link" onClick={() => navigate('/login')}>返回</Button>}>
         <LogoutForm />
       </Card>
     </section>

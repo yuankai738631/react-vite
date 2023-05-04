@@ -87,6 +87,7 @@ interface TaskStatusItemType {
     value: number;
     label: string;
 }
+
 const DataTable = (props: any) => {
     const getStatusTitle = (status: number) => {
         const statusItem = props.taskStatus.find(

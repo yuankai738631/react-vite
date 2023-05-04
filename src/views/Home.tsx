@@ -7,6 +7,7 @@ const {Header, Content, Footer, Sider} = Layout;
 
 const breadNameMap: Record<string, string> = {
     "/task_management": "任务管理",
+    "/publish_management": "发布管理",
     "/user": "人员管理",
     "/user/userinfo": "个人信息",
     "/user/auth": "权限配置"

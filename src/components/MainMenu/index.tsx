@@ -1,7 +1,7 @@
-import {Menu, MenuProps} from "antd";
+import { Menu, MenuProps } from "antd";
 import { useState, ReactNode, Key } from "react";
-import {useLocation, useNavigate} from "react-router-dom";
-import {DashboardOutlined, DesktopOutlined, UserOutlined, TeamOutlined, FileOutlined} from "@ant-design/icons";
+import { useLocation, useNavigate } from "react-router-dom";
+import { DashboardOutlined, DesktopOutlined, UserOutlined, ApartmentOutlined } from "@ant-design/icons";
 
 type MenuItem = Required<MenuProps>['items'][number];
 
@@ -21,12 +21,13 @@ function getItem(
 
 
 const items: MenuItem[] = [
-    getItem('Dashboard', '/dashboard', <DashboardOutlined/>),
-    getItem('任务管理', '/task_management', <DesktopOutlined/>),
-    getItem("人员管理", 'user', <UserOutlined/>, [
+    getItem('Dashboard', '/dashboard', <DashboardOutlined />),
+    getItem('任务管理', '/task_management', <DesktopOutlined />),
+    getItem("账户管理", 'user', <UserOutlined />, [
         getItem('个人信息', '/user/userinfo'),
-        getItem('权限配置', '/user/auth'),
-    ])
+        getItem('企业信息', '/user/auth'),
+    ]),
+    getItem("发布管理", "/publish_management", <ApartmentOutlined/>)
 ];
 
 const MainMenu = () => {

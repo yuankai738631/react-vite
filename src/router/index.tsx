@@ -24,7 +24,7 @@
 // -----------路由表写法-----------------------------------
 import React, {lazy} from "react"; // 路由懒加载
 import {Navigate} from "react-router-dom";
-import {DashboardOutlined, DesktopOutlined, UserOutlined} from "@ant-design/icons";
+import {DashboardOutlined, DesktopOutlined, ApartmentOutlined} from "@ant-design/icons";
 import {RouteObject} from "@/types/routes";
 
 const Login = lazy(() => import("@/views/Login"));
@@ -35,6 +35,7 @@ const Dashboard = lazy(() => import("@/views/PixiPage/pixiPage"));
 const TaskManagement = lazy(() => import("@/views/TaskManagement/taskManagement"));
 const NotFindPage = lazy(() => import("@/NotFindPage"))
 const UserAuth = lazy(() => import("@/views/UserManagement/UserAuth"));
+const PublishManage = lazy(() => import("@/views/PublishManage"))
 
 /** 报错：Uncaught Error: A component suspended while responding to synchronous input.
  * This will cause the UI to be replaced with a loading indicator.
@@ -66,6 +67,11 @@ const routes:RouteObject[] = [
                 path: "task_management",
                 icon: <DesktopOutlined/>,
                 element: widthLoadingComponent(<TaskManagement/>)
+            },
+            {
+                path: "publish_management",
+                icon: <ApartmentOutlined />,
+                element: widthLoadingComponent(<PublishManage />)
             },
             {
                 path: "user/userinfo",

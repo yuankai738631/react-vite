@@ -105,6 +105,10 @@ const PublishManage = () => {
     }
   ];
 
+  const handleCreateInfo = () => {
+    //todo: 新建发布信息
+  }
+
   return (
     <>
       <section className={style["publish_section"]}>
@@ -112,6 +116,9 @@ const PublishManage = () => {
           <PublishSearch />
         </div>
         <div className={style["publish_section__table"]}>
+          <div className={style["publish_section__table--action"]}>
+            <Button type="primary" onClick={handleCreateInfo}>新建发布信息</Button>
+          </div>
           <Table
             bordered
             dataSource={tableData}

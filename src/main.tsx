@@ -8,6 +8,7 @@ import {BrowserRouter} from "react-router-dom";
 import {Provider} from "react-redux";
 import store from "@/store";
 import {ConfigProvider} from "antd"
+import moment from "moment";
 
 ReactDOM.createRoot(document.getElementById('root') as HTMLElement).render(
     <Provider store={store}>

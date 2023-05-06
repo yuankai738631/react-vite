@@ -8,6 +8,9 @@
   }
 
   &__table {
-    margin-top: 1rem;
+
+    &--action {
+      padding: 1rem 0;
+    }
   }
 }

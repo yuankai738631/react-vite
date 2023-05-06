@@ -1,4 +1,17 @@
-import { Table, Space, Form, Input, Select, Button, Row, Col, theme } from "antd"
+import { useState } from "react"
+import { 
+  Table, 
+  Space, 
+  Form, 
+  Input, 
+  Select, 
+  Button, 
+  Row, 
+  Col,
+  Modal,
+  theme 
+} from "antd"
+import CreateInfoForm from "@/components/CreaInfoForm"
 import type { ColumnsType } from "antd/es/table"
 import style from "./publishManage.module.scss"
 
@@ -21,12 +34,12 @@ const columns: ColumnsType<publishColumns> = [
   { title: "发布人员", dataIndex: "publisher", key: "Publisher" },
   { title: "发布时间", dataIndex: "publishTimer", key: "publishTimer" },
   {
-    title: "当前状态", dataIndex: "status", key: "status", render: (_, scoped:publishColumns) => (
+    title: "当前状态", dataIndex: "status", key: "status", render: (_, scoped: publishColumns) => (
       <span>{scoped?.status === 0 ? '下架中' : '发布中'}</span>
     )
   },
   {
-    title: "操作", dataIndex: "action", key: "action", render: (_, scoped:publishColumns) => (
+    title: "操作", dataIndex: "action", key: "action", render: (_, scoped: publishColumns) => (
       <Space size="middle">
         <a href="javasript:void(0);">{scoped?.status === 0 ? '发布' : '下架'}</a>
         <a href="javasript:void(0);">编辑</a>
@@ -41,7 +54,7 @@ const PublishSearch = (props: any) => {
   const [form] = Form.useForm();
   const { token } = theme.useToken();
 
-  const companyList:optionsType[] = [];
+  const companyList: optionsType[] = [];
 
   const formStyle = {
     maxWidth: "none",
@@ -104,9 +117,20 @@ const PublishManage = () => {
       status: 1
     }
   ];
-
+  
+  const [isModalOpen, setIsModalOpen] = useState<boolean>(false);
+  
   const handleCreateInfo = () => {
     //todo: 新建发布信息
+    setIsModalOpen(true)
+  }
+
+  const onCancel = () => {
+    setIsModalOpen(false)
+  }
+
+  const childCancel = (e:string):void => {
+    if (e) onCancel();
   }
 
   return (
@@ -128,6 +152,15 @@ const PublishManage = () => {
           />
         </div>
       </section>
+      <Modal
+          title={<span>新建发布信息</span>}
+          open={isModalOpen}
+          onCancel={onCancel}
+          footer={null}
+          width="40vw"
+      >
+        <CreateInfoForm cancel={(e:string) => childCancel(e)} />
+      </Modal>
     </>
   )
 }

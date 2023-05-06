@@ -208,14 +208,15 @@ const DataTable = (props: any) => {
     ];
     return (
         <div className={style.tableContainer}>
-            <Button
-                type="primary"
-                icon={<PlusOutlined />}
-                onClick={drawerOpen}
-                className={style.headerBtn}
-            >
-                创建任务
-            </Button>
+            <div className={style.headerBtn}>
+                <Button
+                    type="primary"
+                    icon={<PlusOutlined />}
+                    onClick={drawerOpen}
+                >
+                    创建任务
+                </Button>
+            </div>
             <Table
                 size="middle"
                 columns={columns}

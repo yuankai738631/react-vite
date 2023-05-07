@@ -1,4 +1,4 @@
-import { useState } from "react"
+import { useEffect, useState } from "react"
 import { 
   Table, 
   Space, 
@@ -9,11 +9,14 @@ import {
   Row, 
   Col,
   Modal,
-  theme 
+  theme, 
+  message
 } from "antd"
 import CreateInfoForm from "@/components/CreaInfoForm"
 import type { ColumnsType } from "antd/es/table"
 import style from "./publishManage.module.scss"
+import {publish} from "@/request/api"
+import moment from "moment"
 
 interface publishColumns {
   companyName: string
@@ -30,9 +33,11 @@ interface optionsType {
 
 const columns: ColumnsType<publishColumns> = [
   { title: "所属企业", dataIndex: "companyName", key: "companyName" },
-  { title: "发布标题", dataIndex: "name", key: "name" },
+  { title: "发布标题", dataIndex: "title", key: "name" },
   { title: "发布人员", dataIndex: "publisher", key: "Publisher" },
-  { title: "发布时间", dataIndex: "publishTimer", key: "publishTimer" },
+  { title: "发布时间", dataIndex: "publishTimer", key: "publishTimer", render: (_, scoped: publishColumns) => (
+    <span>{moment(scoped?.publishTimer).format('YYYY-MM-DD HH:mm')}</span>
+    )},
   {
     title: "当前状态", dataIndex: "status", key: "status", render: (_, scoped: publishColumns) => (
       <span>{scoped?.status === 0 ? '下架中' : '发布中'}</span>
@@ -117,6 +122,21 @@ const PublishManage = () => {
       status: 1
     }
   ];
+
+  const [data, setData] = useState([])
+
+  const getPublishData = async() => {
+    const defaultParams = {page: 1, pageSize: 10}
+    const res = await publish.queryPublish(defaultParams)
+    if (res.code !== 200) {
+      message.error(res.message)
+      return
+    }
+    if (res.data.length > 0) {
+      setData(res.data)
+    }
+    message.success(res.message)
+  }
   
   const [isModalOpen, setIsModalOpen] = useState<boolean>(false);
   
@@ -130,8 +150,15 @@ const PublishManage = () => {
   }
 
   const childCancel = (e:string):void => {
-    if (e) onCancel();
+    onCancel();
+    if (e === 'save') {
+      getPublishData()
+    }
   }
+
+  useEffect(() => {
+    getPublishData()
+  }, [])
 
   return (
     <>
@@ -145,7 +172,7 @@ const PublishManage = () => {
           </div>
           <Table
             bordered
-            dataSource={tableData}
+            dataSource={data}
             columns={columns}
             size="middle"
             tableLayout="auto"

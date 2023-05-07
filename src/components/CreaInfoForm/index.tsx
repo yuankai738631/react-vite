@@ -1,7 +1,8 @@
-import { Form, Input, Select, Radio, Button, Space, Row, Col } from "antd";
+import { Form, Input, Select, Radio, Button, Space, Row, Col, message } from "antd";
 import type { Rule } from "antd/es/form"
 import moment from "moment";
 import { useState } from "react";
+import {publish} from "@/request/api"
 
 type RuleType = Array<Rule>
 
@@ -64,17 +65,26 @@ const CreateInfoForm = (props: any) => {
     const [form] = Form.useForm()
 
     const onFinish = (value: any) => {
-        setLoading(true)
-        //todo: setTimeout替换为接口
+        
         value.publishTimer = moment().format('YYYY-MM-DD HH:mm:ss')
-        setTimeout(() => {
-            setLoading(false)
-            form.resetFields()
-            props.cancel('cancel')
-        },2000)
+        submitEvent(value)
+    }
+
+    const submitEvent = async(params) => {
+        setLoading(true)
+        const res = await publish.createPublish(params)
+        setLoading(false)
+        if (res.code !== 200) {
+            message.error(res.message)
+            return
+        }
+        message.success(res.message)
+        form.resetFields()
+        props.cancal('save')
     }
 
     const handleCancel = () => {
+        console.log(moment().format())
         props.cancel('cancel')
     }
 

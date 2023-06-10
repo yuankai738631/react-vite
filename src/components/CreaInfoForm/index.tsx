@@ -70,7 +70,7 @@ const CreateInfoForm = (props: any) => {
         submitEvent(value)
     }
 
-    const submitEvent = async(params) => {
+    const submitEvent = async(params: any) => {
         setLoading(true)
         const res = await publish.createPublish(params)
         setLoading(false)

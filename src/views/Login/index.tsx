@@ -26,7 +26,15 @@ const LoginForm = function () {
     const handleSubmit = async (params:{username: string, password: string}): Promise<void> => {
         const {username, password} = params;
         if (username && password) {
-            const res = await user.LoginApi(params)
+            // const res = await user.LoginApi(params)
+            const res = {
+                code: 200,
+                message: 'success',
+                data: {
+                    uid: 1,
+                    token: '1'
+                }
+            }
             if (res.code === 500) {
                 message.warning(`${res.message}, 请重新登录！`);
                 return

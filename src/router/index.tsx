@@ -36,6 +36,7 @@ const TaskManagement = lazy(() => import("@/views/TaskManagement/taskManagement"
 const NotFindPage = lazy(() => import("@/NotFindPage"))
 const UserAuth = lazy(() => import("@/views/UserManagement/UserAuth"));
 const PublishManage = lazy(() => import("@/views/PublishManage"))
+const ArticleManagement = lazy(() => import("@/views/ArticleManagement"))
 
 /** 报错：Uncaught Error: A component suspended while responding to synchronous input.
  * This will cause the UI to be replaced with a loading indicator.
@@ -72,6 +73,10 @@ const routes:RouteObject[] = [
                 path: "publish_management",
                 icon: <ApartmentOutlined />,
                 element: widthLoadingComponent(<PublishManage />)
+            },
+            {
+                path: "article_management",
+                element: widthLoadingComponent(<ArticleManagement/>)
             },
             {
                 path: "user/userinfo",

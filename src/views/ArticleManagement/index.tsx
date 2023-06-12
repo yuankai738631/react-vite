@@ -2,55 +2,47 @@
  * 文章管理
  * @returns 
  */
-import React from 'react';
+import {useState} from 'react';
 import ReactQuill from 'react-quill';
 import 'react-quill/dist/quill.snow.css';
+import classModule from './articleManage.module.scss'
 
-export default class ArticleManagement extends React.Component {
-    state = {
-        value: 'test',
-      };
-    
-      handleChange = (value: any) => {
-        console.log(value)
-        this.setState({
-          value,
-        })
-      };
-    
-      prompt = () => {
-        // notification.open({
-        //   message: 'We got value:',
-        //   description: <span dangerouslySetInnerHTML={{ __html: this.state.value }}></span>,
-        // });
-      };
-    
-      render() {
-        return (
-        //   <Card title="富文本编辑器">
-            <ReactQuill theme="snow" value={this.state.value} onChange={this.handleChange} />
-            // <Button style={{ marginTop: 16 }} onClick={this.prompt}>Prompt</Button>
-        //   </Card>
-        );
-      }
+const ArticleManagement = () => {
+
+    const [value, setValue] = useState<string>('test')
+
+    const handleChange = (val:string | '') => {
+        setValue(val)
+    };
+
+    const modules = {
+      toolbar: [
+        ['bold', 'italic', 'underline', 'strike', 'image'],        // toggled buttons
+        ['blockquote', 'code-block'],
+      
+        [{ 'header': 1 }, { 'header': 2 }],               // custom button values
+        [{ 'list': 'ordered'}, { 'list': 'bullet' }],
+        [{ 'script': 'sub'}, { 'script': 'super' }],      // superscript/subscript
+        [{ 'indent': '-1'}, { 'indent': '+1' }],          // outdent/indent
+        [{ 'direction': 'rtl' }],                         // text direction
+      
+        [{ 'size': ['small', false, 'large', 'huge'] }],  // custom dropdown
+        [{ 'header': [1, 2, 3, 4, 5, 6, false] }],
+      
+        [{ 'color': [] }, { 'background': [] }],          // dropdown with defaults from theme
+        [{ 'font': [] }],
+        [{ 'align': [] }],
+      
+        ['clean'] 
+      ]
+    }
+
+    return (
+        <div className={classModule['quill-container']}>
+            <ReactQuill value={value} onChange={handleChange} modules={modules} />
+        </div>
+
+    )
 }
 
-// const ArticleManagement = () => {
-//     const state = {
-//         value: 'test',
-//     };
-
-//     const handleChange = (value) => {
-        
-//         console.log(value)
-//     };
-
-//     return (
-//         <div>
-//             <ReactQuill value={state.value} onChange={handleChange} />
-//         </div>
-
-//     )
-// }
-
-// export default ArticleManagement
+export default ArticleManagement

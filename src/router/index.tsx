@@ -22,6 +22,7 @@
 // export default baseRouter
 
 // -----------路由表写法-----------------------------------
+
 import React, {lazy} from "react"; // 路由懒加载
 import {Navigate} from "react-router-dom";
 import {DashboardOutlined, DesktopOutlined, ApartmentOutlined} from "@ant-design/icons";
